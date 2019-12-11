@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style type="text/css">
+@font-face {
+font-family: octicons-link;
+src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+body {
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+color: #333;
+font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+font-size: 16px;
+line-height: 1.6;
+word-wrap: break-word;
+}
+a {
+background-color: transparent;
+}
+a:active,
+a:hover {
+outline: 0;
+}
+strong {
+font-weight: bold;
+}
+h1 {
+font-size: 2em;
+margin: 0.67em 0;
+}
+img {
+border: 0;
+}
+hr {
+box-sizing: content-box;
+height: 0;
+}
+pre {
+overflow: auto;
+}
+code,
+kbd,
+pre {
+font-family: monospace, monospace;
+font-size: 1em;
+}
+input {
+color: inherit;
+font: inherit;
+margin: 0;
+}
+html input[disabled] {
+cursor: default;
+}
+input {
+line-height: normal;
+}
+input[type="checkbox"] {
+box-sizing: border-box;
+padding: 0;
+}
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+td,
+th {
+padding: 0;
+}
+* {
+box-sizing: border-box;
+}
+input {
+font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+a {
+color: #4078c0;
+text-decoration: none;
+}
+a:hover,
+a:active {
+text-decoration: underline;
+}
+hr {
+height: 0;
+margin: 15px 0;
+overflow: hidden;
+background: transparent;
+border: 0;
+border-bottom: 1px solid #ddd;
+}
+hr:before {
+display: table;
+content: "";
+}
+hr:after {
+display: table;
+clear: both;
+content: "";
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 15px;
+margin-bottom: 15px;
+line-height: 1.1;
+}
+h1 {
+font-size: 30px;
+}
+h2 {
+font-size: 21px;
+}
+h3 {
+font-size: 16px;
+}
+h4 {
+font-size: 14px;
+}
+h5 {
+font-size: 12px;
+}
+h6 {
+font-size: 11px;
+}
+blockquote {
+margin: 0;
+}
+ul,
+ol {
+padding: 0;
+margin-top: 0;
+margin-bottom: 0;
+}
+ol ol,
+ul ol {
+list-style-type: lower-roman;
+}
+ul ul ol,
+ul ol ol,
+ol ul ol,
+ol ol ol {
+list-style-type: lower-alpha;
+}
+dd {
+margin-left: 0;
+}
+code {
+font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+font-size: 12px;
+}
+pre {
+margin-top: 0;
+margin-bottom: 0;
+font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+.select::-ms-expand {
+opacity: 0;
+}
+.octicon {
+font: normal normal normal 16px/1 octicons-link;
+display: inline-block;
+text-decoration: none;
+text-rendering: auto;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+.octicon-link:before {
+content: '\f05c';
+}
+.markdown-body:before {
+display: table;
+content: "";
+}
+.markdown-body:after {
+display: table;
+clear: both;
+content: "";
+}
+.markdown-body>*:first-child {
+margin-top: 0 !important;
+}
+.markdown-body>*:last-child {
+margin-bottom: 0 !important;
+}
+a:not([href]) {
+color: inherit;
+text-decoration: none;
+}
+.anchor {
+display: inline-block;
+padding-right: 2px;
+margin-left: -18px;
+}
+.anchor:focus {
+outline: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 1em;
+margin-bottom: 16px;
+font-weight: bold;
+line-height: 1.4;
+}
+h1 .octicon-link,
+h2 .octicon-link,
+h3 .octicon-link,
+h4 .octicon-link,
+h5 .octicon-link,
+h6 .octicon-link {
+color: #000;
+vertical-align: middle;
+visibility: hidden;
+}
+h1:hover .anchor,
+h2:hover .anchor,
+h3:hover .anchor,
+h4:hover .anchor,
+h5:hover .anchor,
+h6:hover .anchor {
+text-decoration: none;
+}
+h1:hover .anchor .octicon-link,
+h2:hover .anchor .octicon-link,
+h3:hover .anchor .octicon-link,
+h4:hover .anchor .octicon-link,
+h5:hover .anchor .octicon-link,
+h6:hover .anchor .octicon-link {
+visibility: visible;
+}
+h1 {
+padding-bottom: 0.3em;
+font-size: 2.25em;
+line-height: 1.2;
+border-bottom: 1px solid #eee;
+}
+h1 .anchor {
+line-height: 1;
+}
+h2 {
+padding-bottom: 0.3em;
+font-size: 1.75em;
+line-height: 1.225;
+border-bottom: 1px solid #eee;
+}
+h2 .anchor {
+line-height: 1;
+}
+h3 {
+font-size: 1.5em;
+line-height: 1.43;
+}
+h3 .anchor {
+line-height: 1.2;
+}
+h4 {
+font-size: 1.25em;
+}
+h4 .anchor {
+line-height: 1.2;
+}
+h5 {
+font-size: 1em;
+}
+h5 .anchor {
+line-height: 1.1;
+}
+h6 {
+font-size: 1em;
+color: #777;
+}
+h6 .anchor {
+line-height: 1.1;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table,
+pre {
+margin-top: 0;
+margin-bottom: 16px;
+}
+hr {
+height: 4px;
+padding: 0;
+margin: 16px 0;
+background-color: #e7e7e7;
+border: 0 none;
+}
+ul,
+ol {
+padding-left: 2em;
+}
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+margin-top: 0;
+margin-bottom: 0;
+}
+li>p {
+margin-top: 16px;
+}
+dl {
+padding: 0;
+}
+dl dt {
+padding: 0;
+margin-top: 16px;
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+}
+dl dd {
+padding: 0 16px;
+margin-bottom: 16px;
+}
+blockquote {
+padding: 0 15px;
+color: #777;
+border-left: 4px solid #ddd;
+}
+blockquote>:first-child {
+margin-top: 0;
+}
+blockquote>:last-child {
+margin-bottom: 0;
+}
+table {
+display: block;
+width: 100%;
+overflow: auto;
+word-break: normal;
+word-break: keep-all;
+}
+table th {
+font-weight: bold;
+}
+table th,
+table td {
+padding: 6px 13px;
+border: 1px solid #ddd;
+}
+table tr {
+background-color: #fff;
+border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+background-color: #f8f8f8;
+}
+img {
+max-width: 100%;
+box-sizing: content-box;
+background-color: #fff;
+}
+code {
+padding: 0;
+padding-top: 0.2em;
+padding-bottom: 0.2em;
+margin: 0;
+font-size: 85%;
+background-color: rgba(0,0,0,0.04);
+border-radius: 3px;
+}
+code:before,
+code:after {
+letter-spacing: -0.2em;
+content: "\00a0";
+}
+pre>code {
+padding: 0;
+margin: 0;
+font-size: 100%;
+word-break: normal;
+white-space: pre;
+background: transparent;
+border: 0;
+}
+.highlight {
+margin-bottom: 16px;
+}
+.highlight pre,
+pre {
+padding: 16px;
+overflow: auto;
+font-size: 85%;
+line-height: 1.45;
+background-color: #f7f7f7;
+border-radius: 3px;
+}
+.highlight pre {
+margin-bottom: 0;
+word-break: normal;
+}
+pre {
+word-wrap: normal;
+}
+pre code {
+display: inline;
+max-width: initial;
+padding: 0;
+margin: 0;
+overflow: initial;
+line-height: inherit;
+word-wrap: normal;
+background-color: transparent;
+border: 0;
+}
+pre code:before,
+pre code:after {
+content: normal;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font-size: 11px;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.pl-c {
+color: #969896;
+}
+.pl-c1,
+.pl-s .pl-v {
+color: #0086b3;
+}
+.pl-e,
+.pl-en {
+color: #795da3;
+}
+.pl-s .pl-s1,
+.pl-smi {
+color: #333;
+}
+.pl-ent {
+color: #63a35c;
+}
+.pl-k {
+color: #a71d5d;
+}
+.pl-pds,
+.pl-s,
+.pl-s .pl-pse .pl-s1,
+.pl-sr,
+.pl-sr .pl-cce,
+.pl-sr .pl-sra,
+.pl-sr .pl-sre {
+color: #183691;
+}
+.pl-v {
+color: #ed6a43;
+}
+.pl-id {
+color: #b52a1d;
+}
+.pl-ii {
+background-color: #b52a1d;
+color: #f8f8f8;
+}
+.pl-sr .pl-cce {
+color: #63a35c;
+font-weight: bold;
+}
+.pl-ml {
+color: #693a17;
+}
+.pl-mh,
+.pl-mh .pl-en,
+.pl-ms {
+color: #1d3e81;
+font-weight: bold;
+}
+.pl-mq {
+color: #008080;
+}
+.pl-mi {
+color: #333;
+font-style: italic;
+}
+.pl-mb {
+color: #333;
+font-weight: bold;
+}
+.pl-md {
+background-color: #ffecec;
+color: #bd2c00;
+}
+.pl-mi1 {
+background-color: #eaffea;
+color: #55a532;
+}
+.pl-mdr {
+color: #795da3;
+font-weight: bold;
+}
+.pl-mo {
+color: #1d3e81;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.task-list-item {
+list-style-type: none;
+}
+.task-list-item+.task-list-item {
+margin-top: 3px;
+}
+.task-list-item input {
+margin: 0 0.35em 0.25em -1.6em;
+vertical-align: middle;
+}
+:checked+.radio-label {
+z-index: 1;
+position: relative;
+border-color: #4078c0;
+}
+.sourceLine {
+display: inline-block;
+}
+code .kw { color: #000000; }
+code .dt { color: #ed6a43; }
+code .dv { color: #009999; }
+code .bn { color: #009999; }
+code .fl { color: #009999; }
+code .ch { color: #009999; }
+code .st { color: #183691; }
+code .co { color: #969896; }
+code .ot { color: #0086b3; }
+code .al { color: #a61717; }
+code .fu { color: #63a35c; }
+code .er { color: #a61717; background-color: #e3d2d2; }
+code .wa { color: #000000; }
+code .cn { color: #008080; }
+code .sc { color: #008080; }
+code .vs { color: #183691; }
+code .ss { color: #183691; }
+code .im { color: #000000; }
+code .va {color: #008080; }
+code .cf { color: #000000; }
+code .op { color: #000000; }
+code .bu { color: #000000; }
+code .ex { color: #000000; }
+code .pp { color: #999999; }
+code .at { color: #008080; }
+code .do { color: #969896; }
+code .an { color: #008080; }
+code .cv { color: #008080; }
+code .in { color: #008080; }
+</style>
+<style>
+body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+  padding-top: 0px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1 id="wrangling-excel-documents">Wrangling Excel Documents</h1>
+<p>Zach 2019-12-10</p>
+<p><strong>Purpose</strong>: Wrangling Excel files is often <em>nightmarish</em>. This notebook details some tricks I’ve learned to handle issues found in the wild.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(httr)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">## Use my tidy-exercises copy of UNDOC data for stability</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">url_undoc &lt;-<span class="st"> &quot;https://github.com/zdelrosario/tidy-exercises/blob/master/2019/2019-12-10-news-plots/GSH2013_Homicide_count_and_rate.xlsx?raw=true&quot;</span></a></code></pre></div>
+<h2 id="example:-undoc-homicide-dataset">Example: UNDOC Homicide Dataset</h2>
+<!-- -------------------------------------------------- -->
+
+<p>The following code will use <code>httr</code> to access the Excel file at <code>url_undoc</code>, then pass to <code>read_excel</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">GET</span>(url_undoc, <span class="kw">write_disk</span>(tf &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">fileext =</span> <span class="st">&quot;.xlsx&quot;</span>)))</a></code></pre></div>
+<pre><code>## Response [https://raw.githubusercontent.com/zdelrosario/tidy-exercises/master/2019/2019-12-10-news-plots/GSH2013_Homicide_count_and_rate.xlsx]
+##   Date: 2019-12-11 04:42
+##   Status: 200
+##   Content-Type: application/octet-stream
+##   Size: 85.9 kB
+## &lt;ON DISK&gt;  /var/folders/xv/k5cp232j1cn3y8kym53_nnkc0000gn/T//RtmplrW0oC/file1796d6859fc51.xlsx
+</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">df_raw &lt;-<span class="st"> </span><span class="kw">read_excel</span>(</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  tf,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="dt">sheet =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="dt">skip =</span> <span class="dv">6</span>,</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="dt">col_names =</span> <span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">    <span class="st">&quot;region&quot;</span>,</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">    <span class="st">&quot;sub_region&quot;</span>,</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">    <span class="st">&quot;territory&quot;</span>,</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">    <span class="st">&quot;source&quot;</span>,</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">    <span class="st">&quot;org&quot;</span>,</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">    <span class="st">&quot;indicator&quot;</span>,</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">    <span class="st">&quot;2000&quot;</span>,</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13">    <span class="st">&quot;2001&quot;</span>,</a>
+<a class="sourceLine" id="cb4-14" data-line-number="14">    <span class="st">&quot;2002&quot;</span>,</a>
+<a class="sourceLine" id="cb4-15" data-line-number="15">    <span class="st">&quot;2003&quot;</span>,</a>
+<a class="sourceLine" id="cb4-16" data-line-number="16">    <span class="st">&quot;2004&quot;</span>,</a>
+<a class="sourceLine" id="cb4-17" data-line-number="17">    <span class="st">&quot;2005&quot;</span>,</a>
+<a class="sourceLine" id="cb4-18" data-line-number="18">    <span class="st">&quot;2006&quot;</span>,</a>
+<a class="sourceLine" id="cb4-19" data-line-number="19">    <span class="st">&quot;2007&quot;</span>,</a>
+<a class="sourceLine" id="cb4-20" data-line-number="20">    <span class="st">&quot;2008&quot;</span>,</a>
+<a class="sourceLine" id="cb4-21" data-line-number="21">    <span class="st">&quot;2009&quot;</span>,</a>
+<a class="sourceLine" id="cb4-22" data-line-number="22">    <span class="st">&quot;2010&quot;</span>,</a>
+<a class="sourceLine" id="cb4-23" data-line-number="23">    <span class="st">&quot;2011&quot;</span>,</a>
+<a class="sourceLine" id="cb4-24" data-line-number="24">    <span class="st">&quot;2012&quot;</span></a>
+<a class="sourceLine" id="cb4-25" data-line-number="25">  )</a>
+<a class="sourceLine" id="cb4-26" data-line-number="26">)</a></code></pre></div>
+<p>Let’s take a look at the head.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">df_raw <span class="op">%&gt;%</span><span class="st"> </span>head</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 19
+##   region sub_region territory source org   indicator `2000` `2001` `2002`
+##   &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;        2000   2001   2002
+## 2 Africa Eastern A… Burundi   PH     WHO   Rate          NA     NA     NA
+## 3 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  Count         NA     NA     NA
+## 4 &lt;NA&gt;   &lt;NA&gt;       Comoros   PH     WHO   Rate          NA     NA     NA
+## 5 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  Count         NA     NA     NA
+## 6 &lt;NA&gt;   &lt;NA&gt;       Djibouti  PH     WHO   Rate          NA     NA     NA
+## # … with 10 more variables: `2003` &lt;dbl&gt;, `2004` &lt;dbl&gt;, `2005` &lt;dbl&gt;,
+## #   `2006` &lt;dbl&gt;, `2007` &lt;dbl&gt;, `2008` &lt;dbl&gt;, `2009` &lt;chr&gt;, `2010` &lt;chr&gt;,
+## #   `2011` &lt;chr&gt;, `2012` &lt;chr&gt;
+</code></pre>
+<p>We’ll handle the implicit values with <em>lag-filling</em>.</p>
+<p>Let’s also inspect the tail.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">df_raw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tail</span>(<span class="dv">20</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 20 x 19
+##    region sub_region territory source org   indicator `2000` `2001` `2002`
+##    &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 &lt;NA&gt;   &lt;NA&gt;       Palau     PH     WHO   Rate          NA   NA     NA  
+##  2 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  Count         NA   NA     NA  
+##  3 &lt;NA&gt;   Polynesia  Cook Isl… PH     WHO   Rate          NA   NA     NA  
+##  4 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  Count         NA   NA     NA  
+##  5 &lt;NA&gt;   &lt;NA&gt;       French P… CJ     Nati… Rate          NA   NA     NA  
+##  6 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  Count         NA   NA     NA  
+##  7 &lt;NA&gt;   &lt;NA&gt;       Niue      PH     WHO   Rate          NA   NA     NA  
+##  8 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  Count         NA   NA     NA  
+##  9 &lt;NA&gt;   &lt;NA&gt;       Samoa     PH     WHO   Rate          NA   NA     NA  
+## 10 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  Count         NA   NA     NA  
+## 11 &lt;NA&gt;   &lt;NA&gt;       Tonga     CJ     CTS/… Rate           1    6.1    6.1
+## 12 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  Count          1    6      6  
+## 13 &lt;NA&gt;   &lt;NA&gt;       Tuvalu    PH     WHO   Rate          NA   NA     NA  
+## 14 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  Count         NA   NA     NA  
+## 15 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;          NA   NA     NA  
+## 16 x due… &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;          NA   NA     NA  
+## 17 * CTS… &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;          NA   NA     NA  
+## 18 + In … &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;          NA   NA     NA  
+## 19 &lt;NA&gt;   &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;          NA   NA     NA  
+## 20 # Not… &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;          NA   NA     NA  
+## # … with 10 more variables: `2003` &lt;dbl&gt;, `2004` &lt;dbl&gt;, `2005` &lt;dbl&gt;,
+## #   `2006` &lt;dbl&gt;, `2007` &lt;dbl&gt;, `2008` &lt;dbl&gt;, `2009` &lt;chr&gt;, `2010` &lt;chr&gt;,
+## #   `2011` &lt;chr&gt;, `2012` &lt;chr&gt;
+</code></pre>
+<p>We’ll handle the notes in the <code>region</code> column with an <code>NA</code> replacement.</p>
+<h3 id="sheet-notes">Sheet notes</h3>
+<!-- ------------------------- -->
+
+<p><strong>Issue</strong>: A minor annoyance in these sheets is the addition of footnotes. These are important for understanding the data and its caveats, but they make the data less machine-readable.</p>
+<p><strong>Solution</strong>: I inspected the notes and looked for keywords. I then use an <code>if_else</code> call to replace those instances with missing values. Remember that <code>NA_character_</code> is the correct missing value for character-type vectors.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">## Detect notes and fill with NA</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">df_no_notes &lt;-</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span>df_raw <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">    <span class="dt">region =</span> <span class="kw">if_else</span>(<span class="kw">str_detect</span>(region, <span class="st">&quot;estimate|data&quot;</span>), <span class="ot">NA_character_</span>, region)</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">  )</a></code></pre></div>
+<h3 id="lag-filling">Lag-filling</h3>
+<!-- ------------------------- -->
+
+<p><strong>Issue</strong>: One of the most obnoxious issues with Excel sheets is that important labeling entries are often left blank: These values are implicit by location. While fine for human-readable formats, these implicit values need to be made explicit for a machine-readable format.</p>
+<p><strong>Solution</strong>: We will repeatedly fill the implicit columns with lagged values.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">## Choose variables to lag-fill</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">vars_lagged &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;region&quot;</span>, <span class="st">&quot;sub_region&quot;</span>, <span class="st">&quot;territory&quot;</span>, <span class="st">&quot;source&quot;</span>, <span class="st">&quot;org&quot;</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">## Trim head and notes</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">df_filled &lt;-</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="st">  </span>df_no_notes <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="st">  </span><span class="kw">slice</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="st">  </span><span class="kw">slice</span>(<span class="op">-</span>(<span class="kw">n</span>()<span class="op">-</span><span class="dv">5</span><span class="op">:-</span><span class="kw">n</span>()))</a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">## Helper function to count num rows w/ NA in vars_lagged</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11">countna &lt;-<span class="st"> </span><span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb10-12" data-line-number="12">  df <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="st">    </span><span class="kw">filter_at</span>(<span class="kw">vars</span>(<span class="op">!!!</span>vars_lagged), <span class="kw">any_vars</span>(<span class="kw">is.na</span>(.))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="st">    </span>dim <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="st">    </span>.[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb10-16" data-line-number="16">}</a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">## Repeatedly lag-fill until NA's are gone</span></a>
+<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="cf">while</span> (<span class="kw">countna</span>(df_filled) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {</a>
+<a class="sourceLine" id="cb10-20" data-line-number="20">  df_filled &lt;-</a>
+<a class="sourceLine" id="cb10-21" data-line-number="21"><span class="st">    </span>df_filled <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-22" data-line-number="22"><span class="st">    </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="op">!!!</span>vars_lagged), <span class="op">~</span><span class="kw">if_else</span>(<span class="kw">is.na</span>(.), <span class="kw">lag</span>(.), .))</a>
+<a class="sourceLine" id="cb10-23" data-line-number="23">}</a></code></pre></div>
+<h3 id="tidying">Tidying</h3>
+<!-- ------------------------- -->
+
+<p>The final steps are fairly standard wrangling; ensure all the years are integer values and pivot to tidy the data.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co">## Cast all the estimates</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">df_tmp &lt;-</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span>df_filled <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate_at</span>(</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">    <span class="kw">vars</span>(<span class="st">`</span><span class="dt">2000</span><span class="st">`</span><span class="op">:</span><span class="st">`</span><span class="dt">2012</span><span class="st">`</span>),</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">    as.numeric</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">  )</a></code></pre></div>
+<pre><code>## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co">## Reshape</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">df_tmp &lt;-</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">  </span>df_tmp <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="st">  </span><span class="kw">pivot_longer</span>(</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">    <span class="st">`</span><span class="dt">2000</span><span class="st">`</span><span class="op">:</span><span class="st">`</span><span class="dt">2012</span><span class="st">`</span>,</a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">    <span class="dt">names_to =</span> <span class="st">&quot;year&quot;</span>,</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">    <span class="dt">values_to =</span> <span class="st">&quot;value&quot;</span>,</a>
+<a class="sourceLine" id="cb13-8" data-line-number="8">    <span class="dt">names_ptypes =</span> <span class="kw">list</span>(<span class="dt">year =</span> <span class="kw">integer</span>())</a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="st">  </span><span class="kw">pivot_wider</span>(</a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">    <span class="dt">names_from =</span> indicator,</a>
+<a class="sourceLine" id="cb13-12" data-line-number="12">    <span class="dt">values_from =</span> <span class="st">&quot;value&quot;</span></a>
+<a class="sourceLine" id="cb13-13" data-line-number="13">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="st">  </span>glimpse</a></code></pre></div>
+<pre><code>## Observations: 2,847
+## Variables: 8
+## $ region     &lt;chr&gt; &quot;Africa&quot;, &quot;Africa&quot;, &quot;Africa&quot;, &quot;Africa&quot;, &quot;Africa&quot;, &quot;Af…
+## $ sub_region &lt;chr&gt; &quot;Eastern Africa&quot;, &quot;Eastern Africa&quot;, &quot;Eastern Africa&quot;,…
+## $ territory  &lt;chr&gt; &quot;Burundi&quot;, &quot;Burundi&quot;, &quot;Burundi&quot;, &quot;Burundi&quot;, &quot;Burundi&quot;…
+## $ source     &lt;chr&gt; &quot;PH&quot;, &quot;PH&quot;, &quot;PH&quot;, &quot;PH&quot;, &quot;PH&quot;, &quot;PH&quot;, &quot;PH&quot;, &quot;PH&quot;, &quot;PH&quot;,…
+## $ org        &lt;chr&gt; &quot;WHO&quot;, &quot;WHO&quot;, &quot;WHO&quot;, &quot;WHO&quot;, &quot;WHO&quot;, &quot;WHO&quot;, &quot;WHO&quot;, &quot;WHO…
+## $ year       &lt;int&gt; 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,…
+## $ Rate       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 8, NA…
+## $ Count      &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 790, …
+</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co">## Final cleaning</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">df_undoc &lt;-</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span>df_tmp <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="st">  </span><span class="kw">rename_all</span>(str_to_lower)</a></code></pre></div>
+<p>Let’s check some summaries.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">df_undoc <span class="op">%&gt;%</span><span class="st"> </span>summary</a></code></pre></div>
+<pre><code>##     region           sub_region         territory        
+##  Length:2847        Length:2847        Length:2847       
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##                                                          
+##                                                          
+##                                                          
+##                                                          
+##     source              org                 year           rate       
+##  Length:2847        Length:2847        Min.   :2000   Min.   : 0.000  
+##  Class :character   Class :character   1st Qu.:2003   1st Qu.: 1.500  
+##  Mode  :character   Mode  :character   Median :2006   Median : 3.800  
+##                                        Mean   :2006   Mean   : 8.941  
+##                                        3rd Qu.:2009   3rd Qu.:10.200  
+##                                        Max.   :2012   Max.   :91.400  
+##                                                       NA's   :1242    
+##      count        
+##  Min.   :    0.0  
+##  1st Qu.:   37.0  
+##  Median :  201.5  
+##  Mean   : 2070.6  
+##  3rd Qu.:  873.2  
+##  Max.   :50108.0  
+##  NA's   :1251
+</code></pre>
+
+</body>
+</html>

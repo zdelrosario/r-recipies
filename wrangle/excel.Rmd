@@ -6,13 +6,15 @@ output:
   github_document
 ---
 
-**Purpose**: Wrangling Excel is often *nightmarish*.
+**Purpose**: Wrangling Excel files is often *nightmarish*. This notebook details
+some tricks I've learned to handle issues found in the wild.
 
 ```{r setup}
 library(tidyverse)
 library(readxl)
 library(httr)
 
+## Use my tidy-exercises copy of UNDOC data for stability
 url_undoc <- "https://github.com/zdelrosario/tidy-exercises/blob/master/2019/2019-12-10-news-plots/GSH2013_Homicide_count_and_rate.xlsx?raw=true"
 ```
 
@@ -53,40 +55,88 @@ df_raw <- read_excel(
 )
 ```
 
-Let's take a look at the head:
+Let's take a look at the head.
 
 ```{r undoc-head}
 df_raw %>% head
 ```
 
-```{r undoc-wrangle}
-## Trim head and notes
-df_tmp <-
-  df_raw %>%
-  slice(-1) %>%
-  slice(-(n()-5):-n())
+We'll handle the implicit values with *lag-filling*.
 
+Let's also inspect the tail.
+
+```{r undoc-tail}
+df_raw %>% tail(20)
+```
+
+We'll handle the notes in the `region` column with an `NA` replacement.
+
+### Sheet notes
+<!-- ------------------------- -->
+
+**Issue**: A minor annoyance in these sheets is the addition of footnotes. These
+are important for understanding the data and its caveats, but they make the data
+less machine-readable.
+
+**Solution**: I inspected the notes and looked for keywords. I then use an
+`if_else` call to replace those instances with missing values. Remember that
+`NA_character_` is the correct missing value for character-type vectors.
+
+```{r undoc-rm-notes}
 ## Detect notes and fill with NA
-df_tmp %>%
-  mutate(region = if_else(str_detect(region, "estimate|data"), NA_character_, region))
+df_no_notes <-
+  df_raw %>%
+  mutate(
+    region = if_else(str_detect(region, "estimate|data"), NA_character_, region)
+  )
+```
 
-## Repeatedly lag-fill until NA's are gone
+### Lag-filling
+<!-- ------------------------- -->
+
+**Issue**: One of the most obnoxious issues with Excel sheets is that important
+labeling entries are often left blank: These values are implicit by location.
+While fine for human-readable formats, these implicit values need to be
+made explicit for a machine-readable format.
+
+**Solution**: We will repeatedly fill the implicit columns with lagged values.
+
+```{r undoc-wrangle}
+## Choose variables to lag-fill
+vars_lagged <- c("region", "sub_region", "territory", "source", "org")
+
+## Trim head and notes
+df_filled <-
+  df_no_notes %>%
+  slice(-1) %>%
+  slice(-(n()-5:-n()))
+
+## Helper function to count num rows w/ NA in vars_lagged
 countna <- function(df) {
   df %>%
-    filter_at(vars(region, sub_region, territory, source, org), any_vars(is.na(.))) %>%
+    filter_at(vars(!!!vars_lagged), any_vars(is.na(.))) %>%
     dim %>%
     .[[1]]
 }
 
-while (countna(df_tmp) > 0) {
-  df_tmp <-
-    df_tmp %>%
-    mutate_at(vars(region, sub_region, territory, source, org), ~if_else(is.na(.), lag(.), .))
+## Repeatedly lag-fill until NA's are gone
+while (countna(df_filled) > 0) {
+  df_filled <-
+    df_filled %>%
+    mutate_at(vars(!!!vars_lagged), ~if_else(is.na(.), lag(.), .))
 }
+```
 
+### Tidying
+<!-- ------------------------- -->
+
+The final steps are fairly standard wrangling; ensure all the years are integer
+values and pivot to tidy the data.
+
+```{r undoc-cast}
 ## Cast all the estimates
 df_tmp <-
-  df_tmp %>%
+  df_filled %>%
   mutate_at(
     vars(`2000`:`2012`),
     as.numeric
@@ -111,14 +161,10 @@ df_tmp <-
 df_undoc <-
   df_tmp %>%
   rename_all(str_to_lower)
-
-df_undoc %>%
-  glimpse
 ```
 
-Let's check some summaries:
+Let's check some summaries.
 
 ```{r undoc-summary}
-df_undoc %>% pull(region) %>% unique
 df_undoc %>% summary
 ```
