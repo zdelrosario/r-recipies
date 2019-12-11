@@ -19,7 +19,7 @@ url_undoc <- "https://github.com/zdelrosario/tidy-exercises/blob/master/2019/201
 ## Example: UNDOC Homicide Dataset
 <!-- -------------------------------------------------- -->
 
-The following code will download the Excel file at `url_undoc` locally, then
+The following code will use `httr` to access the Excel file at `url_undoc`, then
 pass to `read_excel`.
 
 ```{r undoc-load}
@@ -57,4 +57,68 @@ Let's take a look at the head:
 
 ```{r undoc-head}
 df_raw %>% head
+```
+
+```{r undoc-wrangle}
+## Trim head and notes
+df_tmp <-
+  df_raw %>%
+  slice(-1) %>%
+  slice(-(n()-5):-n())
+
+## Detect notes and fill with NA
+df_tmp %>%
+  mutate(region = if_else(str_detect(region, "estimate|data"), NA_character_, region))
+
+## Repeatedly lag-fill until NA's are gone
+countna <- function(df) {
+  df %>%
+    filter_at(vars(region, sub_region, territory, source, org), any_vars(is.na(.))) %>%
+    dim %>%
+    .[[1]]
+}
+
+while (countna(df_tmp) > 0) {
+  df_tmp <-
+    df_tmp %>%
+    mutate_at(vars(region, sub_region, territory, source, org), ~if_else(is.na(.), lag(.), .))
+}
+
+## Cast all the estimates
+df_tmp <-
+  df_tmp %>%
+  mutate_at(
+    vars(`2000`:`2012`),
+    as.numeric
+  )
+
+## Reshape
+df_tmp <-
+  df_tmp %>%
+  pivot_longer(
+    `2000`:`2012`,
+    names_to = "year",
+    values_to = "value",
+    names_ptypes = list(year = integer())
+  ) %>%
+  pivot_wider(
+    names_from = indicator,
+    values_from = "value"
+  ) %>%
+  glimpse
+
+## Final cleaning
+df_undoc <-
+  df_tmp %>%
+  rename_all(str_to_lower)
+
+df_undoc %>%
+  glimpse
+```
+
+Let's check some summaries:
+
+```{r undoc-summary}
+df_undoc %>% pull(region) %>% unique
+df_undoc %>% summary
 ```
