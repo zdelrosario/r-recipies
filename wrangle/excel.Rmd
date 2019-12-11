@@ -1,0 +1,60 @@
+---
+title: "Wrangling Excel Documents"
+author: "Zach"
+date: 2019-12-10
+output:
+  github_document
+---
+
+**Purpose**: Wrangling Excel is often *nightmarish*.
+
+```{r setup}
+library(tidyverse)
+library(readxl)
+library(httr)
+
+url_undoc <- "https://github.com/zdelrosario/tidy-exercises/blob/master/2019/2019-12-10-news-plots/GSH2013_Homicide_count_and_rate.xlsx?raw=true"
+```
+
+## Example: UNDOC Homicide Dataset
+<!-- -------------------------------------------------- -->
+
+The following code will download the Excel file at `url_undoc` locally, then
+pass to `read_excel`.
+
+```{r undoc-load}
+GET(url_undoc, write_disk(tf <- tempfile(fileext = ".xlsx")))
+
+df_raw <- read_excel(
+  tf,
+  sheet = 1,
+  skip = 6,
+  col_names = c(
+    "region",
+    "sub_region",
+    "territory",
+    "source",
+    "org",
+    "indicator",
+    "2000",
+    "2001",
+    "2002",
+    "2003",
+    "2004",
+    "2005",
+    "2006",
+    "2007",
+    "2008",
+    "2009",
+    "2010",
+    "2011",
+    "2012"
+  )
+)
+```
+
+Let's take a look at the head:
+
+```{r undoc-head}
+df_raw %>% head
+```
