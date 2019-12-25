@@ -1,0 +1,59 @@
+---
+title: "Marginals with ggExtra"
+author: "Zach"
+date: 2019-12-25
+output:
+  github_document
+---
+
+The package `ggExtra` has tools to add marginal distributions to a `ggplot`.
+However, the syntax is non-standard, and does not fit in the usual Tidyverse
+pipeline.
+
+```{r setup}
+library(tidyverse)
+library(ggExtra)
+```
+
+To use `ggExtra::marginals()`, we have to pass the plot itself to the function.
+I find that piping doesn't work; I have to save to an intermediate variable and
+pass explicitly:
+
+```{r baseline}
+p <-
+  mpg %>%
+  pivot_longer(names_to = "type", values_to = "mpg", cty:hwy) %>%
+
+  ggplot(aes(displ, mpg)) +
+  geom_point()
+
+ggMarginal(p)
+```
+
+You can change the type of marginal with the `type` keyword. Valid choices
+are `density, histogram, boxplot, violin, densigram`.
+
+```{r densigram}
+p <-
+  mpg %>%
+  pivot_longer(names_to = "type", values_to = "mpg", cty:hwy) %>%
+
+  ggplot(aes(displ, mpg)) +
+  geom_point()
+
+ggMarginal(p, type = "densigram")
+```
+
+In order to show groups, you have to enable a flag based on the chosen
+aesthetic. This is really obnoxious and easy to forget.
+
+```{r color-groups}
+p <-
+  mpg %>%
+  pivot_longer(names_to = "type", values_to = "mpg", cty:hwy) %>%
+
+  ggplot(aes(displ, mpg, color = type)) +
+  geom_point()
+
+ggMarginal(p, groupColour = TRUE)
+```
