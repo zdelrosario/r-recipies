@@ -1,0 +1,44 @@
+---
+title: "GGpairs"
+author: "Zach"
+date: 2019-12-30
+output:
+  github_document
+---
+
+GGpairs helps one create [scatterplot
+matrices](https://en.wikipedia.org/wiki/Scatter_plot#Scatter_plot_matrices), and
+is provided by the packages `GGally`.
+
+```{r setup}
+library(tidyverse)
+library(GGally)
+```
+
+Basic usage; plot a few variables.
+
+```{r vis-basic}
+mpg %>%
+  select(year, cyl, drv) %>%
+  ggpairs
+```
+
+When plotting many variables, the printout can get annoying. Use `print()` to
+suppress.
+
+```{r vis-select}
+mpg %>%
+  select_if(is.numeric) %>%
+  ggpairs %>%
+  print(progress = F)
+```
+
+`ggpairs` can take an `aes()` specification. Make sure you don't select out the
+column you're trying to visualize!
+
+```{r vis-aes, fig.width=12, fig.height=10}
+mpg %>%
+  select(displ, year, cyl, drv, cty, hwy, class) %>%
+  ggpairs(., mapping = aes(color = class)) %>%
+  print(progress = F)
+```
