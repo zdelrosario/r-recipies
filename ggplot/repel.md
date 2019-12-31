@@ -3,8 +3,10 @@ ggrepel
 Zach
 2019-12-31
 
-**Purpose**: Reminder on key `ggrepel`
-    features.
+**Purpose**: Reminder on key `ggrepel` features. Very brief; the
+[vignette](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html)
+is really good, and worth
+    referencing.
 
 ``` r
 library(tidyverse)
