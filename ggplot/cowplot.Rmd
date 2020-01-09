@@ -1,0 +1,103 @@
+---
+title: "Cowplot (Tiled figures) Recipies"
+author: "Zach"
+date: 2019-12-30
+output:
+  github_document
+---
+
+Cowplot provides utilities for combining multiple ggplot figures.
+
+```{r setup}
+library(tidyverse)
+library(cowplot)
+```
+
+Use a common theme to control component plot margins.
+
+```{r com-theme}
+theme_common <- function() {
+  theme_minimal() %+replace%
+  theme(plot.margin = unit(c(1.0, 0.0, 0.0, 0.0), "cm"))
+}
+```
+
+Construct a manual scatterplot matrix (basic usage).
+
+```{r basic-scatterplot-matrix}
+p_displ_v_cty <-
+  mpg %>%
+  ggplot(aes(displ, cty)) +
+  geom_point() +
+  theme_common()
+
+p_displ <-
+  mpg %>%
+  ggplot(aes(displ)) +
+  geom_density() +
+  theme_common()
+
+p_cty <-
+  mpg %>%
+  ggplot(aes(cty)) +
+  geom_density() +
+  theme_common()
+
+## Cowplot
+plot_grid(
+  p_displ,
+  p_displ_v_cty,
+  p_displ_v_cty,
+  p_cty,
+
+  nrow = 2,
+  ncol = 2
+)
+
+ggsave("./tmp.png")
+```
+
+Add labels
+
+```{r labeled-cowplot}
+## Cowplot
+plot_grid(
+  p_displ,
+  p_displ_v_cty,
+  p_displ_v_cty,
+  p_cty,
+
+  nrow = 2,
+  ncol = 2,
+  labels = c(
+    "Top-left",
+    "Top-right",
+    "Bottom-left",
+    "Bottom-right"
+  ),
+
+  hjust = -0.1,
+  label_fontface = "plain"
+)
+```
+
+Load component images; note that the `magick` package is required
+(`install.packages("magick")`).
+
+```{r load-example}
+p_loaded <-
+  ggdraw() +
+  draw_image("./tmp.png", scale = 1.0)
+
+## Cowplot
+plot_grid(
+  p_displ,
+  p_loaded,
+  p_displ_v_cty,
+  p_cty,
+
+  nrow = 2,
+  ncol = 2
+)
+
+```

@@ -1,0 +1,72 @@
+---
+title: "ggrepel"
+author: "Zach"
+date: 2019-12-31
+output:
+  github_document
+---
+
+**Purpose**: Reminder on key `ggrepel` features.
+
+```{r setup}
+library(tidyverse)
+library(ggrepel)
+```
+
+`ggrepel` provides extremely useful tools for plotting text that automatically
+dodges datapoints.
+
+```{r }
+tribble(
+  ~dtl, ~gam, ~gam_lo, ~gam_up, ~label,
+     0,    0,       0,       0, "Perfect",
+    -1,   -1,      -1,      -1, "Anti-conservative",
+    +1,   +1,      +1,      +1, "Conservative",
+    +1,   -1,      -1,      -1, "False detection",
+    -1,   +1,      +1,      +1, "Missed detection",
+  +0.5, +0.5,      -1,      +2, "Inconclusive"
+) %>%
+
+  ggplot(aes(dtl, gam)) +
+  geom_point() +
+  geom_text_repel(aes(label = label))
+```
+
+However, the settings can be rather overwhelming. Key arguments are summarized
+in the [vignette](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html):
+
+| Option | Default| Description |
+|---|---|
+| force | 1 | force of repulsion between overlapping text labels |
+| direction | "both"| move text labels “both” (default), “x”, or “y” directions |
+| max.iter | 2000 | maximum number of iterations to try to resolve overlaps |
+| nudge_x | 0 | adjust the starting x position of the text label |
+| nudge_y | 0 | adjust the starting y position of the text label |
+| box.padding | 0.25 lines | padding around the text label |
+| point.padding | 0 lines | padding around the labeled data point |
+| segment.color | "black" | line segment color |
+| segment.size | 0.5 mm | line segment thickness |
+| segment.alpha | 1.0 | line segment transparency |
+| arrow | NULL | render line segment as an arrow with grid::arrow() |
+
+One of the *most* key arguments is `point.padding`, which helps prevent text
+from overlapping the points:
+
+```{r }
+tribble(
+  ~dtl, ~gam, ~gam_lo, ~gam_up, ~label,
+     0,    0,       0,       0, "Perfect",
+    -1,   -1,      -1,      -1, "Anti-conservative",
+    +1,   +1,      +1,      +1, "Conservative",
+    +1,   -1,      -1,      -1, "False detection",
+    -1,   +1,      +1,      +1, "Missed detection",
+  +0.5, +0.5,      -1,      +2, "Inconclusive"
+) %>%
+
+  ggplot(aes(dtl, gam)) +
+  geom_point() +
+  geom_text_repel(
+    aes(label = label),
+    point.padding = 1
+  )
+```
