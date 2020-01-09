@@ -29,7 +29,11 @@ theme_common <- function() {
     panel.grid.minor = element_line(color = "grey90"),
 
     aspect.ratio = 4 / 4,
-    plot.margin   = unit(c(t = +0, b = +0, r = +0, l = +0), "cm")
+
+    plot.margin = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
+    plot.title = element_text(size = 18),
+    plot.subtitle = element_text(size = 16),
+    plot.caption = element_text(size = 12)
   )
 }
 ```
