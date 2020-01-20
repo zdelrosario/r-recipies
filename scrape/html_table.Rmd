@@ -1,0 +1,113 @@
+---
+title: "Scraping an HTML Table"
+author: "Zach"
+date: 2020-01-19
+output:
+  github_document
+---
+
+Simple recipe for scraping HTML tables.
+
+```{r }
+library(tidyverse)
+library(rvest)
+library(lubridate)
+
+str_to_var <- function(str) {
+  str %>%
+    str_trim(.) %>%
+    str_to_lower(.) %>%
+    str_replace_all("\\s+", "_")
+}
+```
+
+## Page Reading and Selecting
+<!-- -------------------------------------------------- -->
+
+First, we need the URL of the target page
+
+```{r url}
+url_page <- "https://en.wikipedia.org/wiki/Oldest_people"
+```
+
+Next, we need a *css selector* for our chosen table. To do so, we open the
+target page in our browser, open the developer tools, find the html element we
+want to select, and copy the CSS selector.
+
+In Firefox Option + Command + C brings open the relevant console.
+
+Doing the previous on the Oldest people page yields the following two selectors.
+
+```{r selector}
+css_women <- "table.wikitable:nth-child(15)"
+css_men <- "table.wikitable:nth-child(18)"
+```
+
+## Wrangle
+<!-- -------------------------------------------------- -->
+
+We use rvest to read html pages and use the selectors to
+grab certain tables.
+
+```{r read}
+## Read the page based on url
+page <- read_html(url_page)
+
+## Use html_nodes() and html_table()
+df_women <-
+  page %>%
+  html_nodes(css_women) %>%
+  html_table() %>%
+  .[[1]] %>%
+  as_tibble() %>%
+
+  mutate(sex = "F") %>%
+  rename_all(~str_remove_all(., "\\[.*\\]")) %>%
+  rename_all(str_to_var)
+
+df_men <-
+  page %>%
+  html_nodes(css_men) %>%
+  html_table() %>%
+  .[[1]] %>%
+  as_tibble() %>%
+
+  mutate(sex = "M") %>%
+  rename_all(~str_remove_all(., "\\[.*\\]")) %>%
+  rename_all(str_to_var)
+
+## Bind two tables
+df_data <-
+  bind_rows(
+    df_women,
+    df_men
+  ) %>%
+  mutate(
+    name = str_remove_all(name, "\\[.*\\]") %>%
+        fct_reorder(., age),
+    age = str_extract(age, "\\d+") %>% as.integer,
+    birth_date = dmy(birth_date),
+    death_date = dmy(death_date) %>%
+      if_else(is.na(.), today(), .)
+  )
+```
+
+## Visualize
+<!-- -------------------------------------------------- -->
+
+```{r vis}
+df_data %>%
+
+  ggplot() +
+  geom_segment(
+    aes(x = birth_date, xend = death_date, y = name, yend = name, color = sex)
+  ) +
+
+  scale_color_discrete(name = "") +
+  theme_minimal() +
+  labs(
+    x = "",
+    y = "Person"
+  )
+
+```
