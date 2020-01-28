@@ -82,8 +82,8 @@ Simple feature `sf` data can be used in a Tidyverse pipeline. We can use this to
 The fire data come with prose descriptions of fires:
 
 ```{r view-control}
-df_aus_fires %>% 
-  head(2) %>% 
+df_aus_fires %>%
+  head(2) %>%
   pull(description)
 ```
 
@@ -115,7 +115,7 @@ df_aus_control %>% pull(control) %>% unique
 ### GIS
 <!-- --------------------------- -->
 
-Geographic distribution of fires and their degree of control. 
+Geographic distribution of fires and their degree of control.
 
 ```{r gis_vis}
 fires_crs <- st_crs(df_aus_control)
@@ -171,3 +171,26 @@ ggplot() +
 
 The fires are concentrated around Canberra and Sydney. Of course, smoke is probably affecting nearby cities as well.
 
+
+### Filter
+<!-- --------------------------- -->
+
+Filtering by coordinates is a little tricky. Below I use `st_within`, which by
+default returns a sparse vector. We need to disable that feature to use within
+a Tidyverse pipeline.
+
+```{r bound-filter}
+bound <- st_polygon(
+  list(rbind(
+    c(+142, -38),
+    c(+142, -27),
+    c(+155, -27),
+    c(+155, -38),
+    c(+142, -38)
+  ))
+)
+
+sf_cities_latlon %>%
+  filter(st_within(., bound, sparse = FALSE)) %>%
+  glimpse
+```
