@@ -1,0 +1,233 @@
+---
+title: "sf Filters"
+author: "Zach"
+date: 2020-01-29
+output:
+  github_document
+---
+
+The [sf](https://r-spatial.github.io/sf/index.html) package has a wide variety
+of tools, but the documentation at the function level is poor (the
+[vignettes](https://r-spatial.github.io/sf/articles/sf3.html#geometrical-operations)
+are nice, but cumbersome for reference).
+
+The following are recipies for using sf tools to `filter()` GIS data.
+
+```{r setup, echo=FALSE}
+library(tidyverse)
+library(sf)
+```
+
+### Running Example Data
+
+The following simple data are from an [sf vignette](https://r-spatial.github.io/sf/articles/sf3.html#geometrical-operations):
+
+```{r simple-data}
+## Red set
+b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
+b1 = b0 + 2
+b2 = b0 + c(-0.2, 2)
+x = st_sfc(b0, b1, b2)
+sf_x <- st_sf(x)
+
+## Green set
+a0 = b0 * 0.8
+a1 = a0 * 0.5 + c(2, 0.7)
+a2 = a0 + 1
+a3 = b0 * 0.5 + c(1.5, -0.5)
+y = st_sfc(a0,a1,a2,a3)
+sf_y <- st_sf(y)
+
+ggplot() +
+  geom_sf(data = sf_x, color = "red", fill = NA) +
+  geom_sf(data = sf_y, color = "green", fill = NA) +
+  theme_void()
+```
+
+## Binary Logical Operations
+<!-- -------------------------------------------------- -->
+
+The sf binary logical operations are based on
+[DE-9IM](https://en.wikipedia.org/wiki/DE-9IM); a framework for defining binary
+relationships between topological objects. The following `sf` calls implement
+these binary relationships.
+
+|  |  |
+|--|--|
+| st_intersects(x, y) | x intersects y |
+| st_disjoint(x, y) | x not Intersects y |
+| st_touches(x, y) | x meets y |
+| st_crosses(x, y) | x crosses y |
+| st_within(x, y) | x inside y |
+| st_contains(x, y) | x contains y |
+| st_overlaps(x, y) | x overlaps y |
+| st_equals(x, y) | x equals y |
+| st_covers(x, y) | x covers y |
+| st_covered_by(x, y) | x covered by y |
+| st_equals_exact(x, y) | x equals y exactly |
+
+These functions---by default---return a sparse matrix of results:
+
+```{r sparse-return}
+y %>% st_intersects(., b0)
+```
+
+To use these functions with `filter()`, we'll need to disable the sparse return:
+
+```{r dense-return}
+y %>% st_intersects(., b0, sparse = FALSE)
+```
+
+We can easily integrate this in a tidyverse pipeline:
+
+```{r pipeline-example}
+sf_y %>% 
+  filter(st_intersects(., b0, sparse = FALSE))
+```
+
+
+### Illustration
+
+Here we illustrate all of the binary relationships listed above.
+
+```{r vis-intersects}
+sf_y %>% 
+  mutate(intersects = st_intersects(., b0, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = intersects), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_intersects")
+```
+
+```{r vis-disjoint}
+sf_y %>% 
+  mutate(disjoint = st_disjoint(., b0, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = disjoint), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_disjoint")
+```
+
+
+```{r vis-touches}
+sf_y %>% 
+  mutate(touches = st_touches(., b0, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = touches), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_touches")
+```
+
+
+```{r vis-crosses}
+sf_y %>% 
+  mutate(crosses = st_crosses(., b0, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = crosses), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_crosses")
+```
+
+
+```{r vis-within}
+sf_y %>% 
+  mutate(within = st_within(., b0, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = within), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_within")
+```
+
+```{r vis-contains}
+sf_y %>% 
+  mutate(contains = st_contains(., b0, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = contains), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_contains")
+```
+
+
+```{r vis-overlaps}
+sf_y %>% 
+  mutate(overlaps = st_overlaps(., b0, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = overlaps), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_overlaps")
+```
+
+
+```{r vis-equals}
+sf_y %>% 
+  mutate(equals = st_equals(., b0, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = equals), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_equals")
+```
+
+
+```{r vis-covers}
+sf_y %>% 
+  mutate(covers = st_covers(., b0, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = covers), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_covers")
+```
+
+```{r vis-covered_by}
+sf_y %>% 
+  mutate(covered_by = st_covered_by(., b0, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = covered_by), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_covered_by")
+```
+
+```{r vis-equals_exact}
+sf_y %>% 
+  mutate(equals_exact = st_equals_exact(., b0, par = 0.01, sparse = FALSE)) %>% 
+  
+  ggplot() +
+  geom_sf(aes(color = equals_exact), fill = NA) +
+  geom_sf(data = b0, color = "black", fill = NA) +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(title = "st_equals_exact")
+```
+
+
+
+
