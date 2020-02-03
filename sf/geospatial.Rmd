@@ -66,12 +66,20 @@ df_aus_fires <- sf::st_read(url)
 url_aus_geo <- "http://data.daff.gov.au/data/warehouse/nsaasr9nnd_022/nsaasr9nnd_02211a04es_geo___.zip"
 curl::curl_download(url_aus_geo, destfile = "../data/aus.shp.zip")
 unzip("../data/aus.shp.zip", exdir = "../data")
+# Process the filename
+names_aus_geo <- unzip("../data/aus.shp.zip", list = TRUE)
+main_aus_geo <-
+  names_aus_geo %>%
+  pull(Name) %>%
+  .[[1]] %>%
+  str_remove(., "\\.\\w+$")
+
 ```
 
 Load boundary data.
 
 ```{r boundaries}
-df_boundaries <- sf::read_sf("../data", "aust_cd66states")
+df_boundaries <- sf::read_sf("../data", main_aus_geo)
 ```
 
 ## Wrangle

@@ -51,14 +51,14 @@ stop` to halt the Docker
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ──────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
+    ## ── Attaching packages ─────────────────────────────────── tidyverse 1.3.0 ──
 
     ## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
     ## ✓ tibble  2.1.3     ✓ dplyr   0.8.3
-    ## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
+    ## ✓ tidyr   1.0.2     ✓ stringr 1.4.0
     ## ✓ readr   1.3.1     ✓ forcats 0.4.0
 
-    ## ── Conflicts ─────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
@@ -96,10 +96,10 @@ df_aus_fires <- sf::st_read(url)
 ```
 
     ## Reading layer `majorIncidents' from data source `http://www.rfs.nsw.gov.au/feeds/majorIncidents.json' using driver `GeoJSON'
-    ## Simple feature collection with 89 features and 7 fields
+    ## Simple feature collection with 77 features and 7 fields
     ## geometry type:  GEOMETRY
     ## dimension:      XY
-    ## bbox:           xmin: 144.5517 ymin: -37.4437 xmax: 153.5226 ymax: -28.37562
+    ## bbox:           xmin: 145.4417 ymin: -37.45081 xmax: 153.3915 ymax: -29.01782
     ## epsg (SRID):    4326
     ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
 
@@ -108,12 +108,19 @@ df_aus_fires <- sf::st_read(url)
 url_aus_geo <- "http://data.daff.gov.au/data/warehouse/nsaasr9nnd_022/nsaasr9nnd_02211a04es_geo___.zip"
 curl::curl_download(url_aus_geo, destfile = "../data/aus.shp.zip")
 unzip("../data/aus.shp.zip", exdir = "../data")
+# Process the filename
+names_aus_geo <- unzip("../data/aus.shp.zip", list = TRUE)
+main_aus_geo <-
+  names_aus_geo %>%
+  pull(Name) %>%
+  .[[1]] %>%
+  str_remove(., "\\.\\w+$")
 ```
 
 Load boundary data.
 
 ``` r
-df_boundaries <- sf::read_sf("../data", "aust_cd66states")
+df_boundaries <- sf::read_sf("../data", main_aus_geo)
 ```
 
 ## Wrangle
@@ -126,14 +133,14 @@ this to process the descriptions for `control` information.
 The fire data come with prose descriptions of fires:
 
 ``` r
-df_aus_fires %>% 
-  head(2) %>% 
+df_aus_fires %>%
+  head(2) %>%
   pull(description)
 ```
 
-    ## [1] ALERT LEVEL: Advice <br />LOCATION: bugtown road <br />COUNCIL AREA: Snowy Monaro <br />STATUS: Being controlled <br />TYPE: Bush Fire <br />FIRE: Yes <br />SIZE: 93650 ha <br />MAJOR FIRE UPDATE AS AT 20 Jan 2020 8:10AM: <a href='http://www.rfs.nsw.gov.au/fire-information/major-fire-updates/mfu?id=8891' target='_blank'> More information</a><br />RESPONSIBLE AGENCY: Rural Fire Service <br />UPDATED: 20 Jan 2020 15:59                         
-    ## [2] ALERT LEVEL: Advice <br />LOCATION: Badja Forest Rd, Countegany, NSW 2630 <br />COUNCIL AREA: Eurobodalla <br />STATUS: Being controlled <br />TYPE: Bush Fire <br />FIRE: Yes <br />SIZE: 242442 ha <br />MAJOR FIRE UPDATE AS AT 20 Jan 2020 7:30PM: <a href='http://www.rfs.nsw.gov.au/fire-information/major-fire-updates/mfu?id=8525' target='_blank'> More information</a><br />RESPONSIBLE AGENCY: Rural Fire Service <br />UPDATED: 20 Jan 2020 15:17
-    ## 89 Levels: ALERT LEVEL: Advice <br />LOCATION: -31.332  151.292 <br />COUNCIL AREA: Tamworth <br />STATUS: Under control <br />TYPE: Bush Fire <br />FIRE: Yes <br />SIZE: 703 ha <br />RESPONSIBLE AGENCY: Rural Fire Service <br />UPDATED: 20 Jan 2020 11:16 ...
+    ## [1] ALERT LEVEL: Advice <br />LOCATION: 2795 Abercrombie Rd <br />COUNCIL AREA: Oberon <br />STATUS: Under control <br />TYPE: Grass Fire <br />FIRE: Yes <br />SIZE: 10 ha <br />RESPONSIBLE AGENCY: Rural Fire Service <br />UPDATED: 3 Feb 2020 09:58                                                                                                                                                                        
+    ## [2] ALERT LEVEL: Advice <br />LOCATION: Yaouk <br />COUNCIL AREA: Snowy Monaro <br />STATUS: Being controlled <br />TYPE: Bush Fire <br />FIRE: Yes <br />SIZE: 98036 ha <br />MAJOR FIRE UPDATE AS AT 3 Feb 2020 10:36PM: <a href='http://www.rfs.nsw.gov.au/fire-information/major-fire-updates/mfu?id=8891' target='_blank'> More information</a><br />RESPONSIBLE AGENCY: Rural Fire Service <br />UPDATED: 3 Feb 2020 16:13
+    ## 77 Levels: ALERT LEVEL: Advice <br />LOCATION: -32 29.43 150 44.27 <br />COUNCIL AREA: Muswellbrook <br />STATUS: Under control <br />TYPE: Bush Fire <br />FIRE: Yes <br />SIZE: 203 ha <br />RESPONSIBLE AGENCY: NSW National Parks and Wildlife Service <br />UPDATED: 3 Feb 2020 15:47 ...
 
 This is human-readable, but not machine-readable. We can extract the
 `STATUS` information with a regular expression:
@@ -152,17 +159,17 @@ df_aus_control <-
 df_aus_control %>% glimpse
 ```
 
-    ## Observations: 89
+    ## Observations: 77
     ## Variables: 9
-    ## $ title            <fct> "Adaminaby Complex ", "Badja Forest Rd, Countegany",…
-    ## $ link             <fct> http://www.rfs.nsw.gov.au/fire-information/major-fir…
+    ## $ title            <fct> "Abercrombie Road", "Adaminaby Complex ", "Albert St…
+    ## $ link             <fct> http://www.rfs.nsw.gov.au/fire-information/fires-nea…
     ## $ category         <fct> Advice, Advice, Advice, Advice, Advice, Advice, Advi…
-    ## $ guid             <fct> https://incidents.rfs.nsw.gov.au/api/v1/incidents/36…
+    ## $ guid             <fct> https://incidents.rfs.nsw.gov.au/api/v1/incidents/37…
     ## $ guid_isPermaLink <fct> true, true, true, true, true, true, true, true, true…
-    ## $ pubDate          <dttm> 2020-01-20 04:59:00, 2020-01-20 04:17:00, 2020-01-2…
-    ## $ description      <fct> "ALERT LEVEL: Advice <br />LOCATION: bugtown road <b…
+    ## $ pubDate          <dttm> 2020-02-02 22:58:00, 2020-02-03 05:13:00, 2020-02-0…
+    ## $ description      <fct> "ALERT LEVEL: Advice <br />LOCATION: 2795 Abercrombi…
     ## $ geometry         <GEOMETRY [°]> GEOMETRYCOLLECTION (POINT (..., GEOMETRYCOL…
-    ## $ control          <ord> Being controlled, Being controlled, Being controlled…
+    ## $ control          <ord> Under control, Being controlled, Under control, Bein…
 
 Check the levels of the `control` data:
 
@@ -170,7 +177,7 @@ Check the levels of the `control` data:
 df_aus_control %>% pull(control) %>% unique
 ```
 
-    ## [1] Being controlled Under control    Out of control  
+    ## [1] Under control    Being controlled Out of control  
     ## Levels: Out of control < Being controlled < Under control
 
 ## Visualize
@@ -239,3 +246,34 @@ ggplot() +
 
 The fires are concentrated around Canberra and Sydney. Of course, smoke
 is probably affecting nearby cities as well.
+
+### Filter
+
+<!-- --------------------------- -->
+
+Filtering by coordinates is a little tricky. Below I use `st_within`,
+which by default returns a sparse vector. We need to disable that
+feature to use within a Tidyverse pipeline.
+
+``` r
+bound <- st_polygon(
+  list(rbind(
+    c(+142, -38),
+    c(+142, -27),
+    c(+155, -27),
+    c(+155, -38),
+    c(+142, -38)
+  ))
+)
+
+sf_cities_latlon %>%
+  filter(st_within(., bound, sparse = FALSE)) %>%
+  glimpse
+```
+
+    ## although coordinates are longitude/latitude, st_within assumes that they are planar
+
+    ## Observations: 4
+    ## Variables: 2
+    ## $ city     <chr> "Brisbane", "Sydney", "Canberra", "Melbourne"
+    ## $ geometry <POINT [°]> POINT (153.0251 -27.4698), POINT (151.2093 -33.8688), …
