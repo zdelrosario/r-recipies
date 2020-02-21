@@ -1,0 +1,67 @@
+---
+title: "TidyEval: Brace Syntax"
+author: "Zach"
+date: 2020-02-21
+output:
+  github_document
+---
+
+The syntax for tidy evaluation changed (Circa Feb. 2020) since I first learned
+it in the DCL. The syntax now uses braces and dots rather than explicit
+quotation and dereferencing. The page [Programming with
+dplyr](https://dplyr.tidyverse.org/dev/articles/programming.html) has full
+up-to-date details on this syntax, but I'm recording the quotation stuff here for
+my own reference.
+
+```{r library}
+library(tidyverse)
+
+```
+
+When writing a function that takes **tibble variable names** (as strings) and
+uses dplyr operations, you can use the `.data` pronoun with square braces `[[
+]]`.
+
+```{r square-brace-function}
+for (var in names(mtcars)[1:2]) {
+  mtcars %>%
+    count(.data[[var]]) %>% print()
+}
+```
+
+When writing a function that takes **tibble variables** and uses dplyr operations,
+you need to use curly braces `{{ }}` to signal this *indirection*.
+
+```{r curly-brace-function}
+var_summary <- function(data, var) {
+  data %>%
+    summarize(
+      n = n(),
+      min = min({{ var }}),
+      max = max({{ var }})
+    )
+}
+
+mtcars %>%
+  group_by(cyl) %>%
+  var_summary(mpg)
+```
+
+To capture **multiple tibble variables**, use the `...` pattern. When using this
+feature, the [Tidyverse style
+guide](https://design.tidyverse.org/dots-prefix.html) recommends dot-prefixing
+all other argument names. This is to help prevent unintentional capture in the
+`...` set.
+
+```{r dot-function}
+my_summarize <- function(.data, ...) {
+  .data %>%
+    group_by(...) %>%
+    summarize(
+      mass = mean(mass, na.rm = TRUE),
+      height = mean(height, na.rm = TRUE)
+    )
+}
+
+starwars %>% my_summarize(species, gender)
+```
