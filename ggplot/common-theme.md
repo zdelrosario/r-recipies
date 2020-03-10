@@ -12,10 +12,10 @@ library(tidyverse)
 
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
 
-    ## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
-    ## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-    ## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
-    ## ✔ readr   1.3.1     ✔ forcats 0.4.0
+    ## ✔ ggplot2 3.3.0     ✔ purrr   0.3.3
+    ## ✔ tibble  2.1.3     ✔ dplyr   0.8.5
+    ## ✔ tidyr   1.0.2     ✔ stringr 1.4.0
+    ## ✔ readr   1.3.1     ✔ forcats 0.5.0
 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
@@ -41,10 +41,11 @@ theme_common <- function() {
 
     aspect.ratio = 4 / 4,
 
-    plot.margin   = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
-    plot.title    = element_text(size = 18),
+    plot.margin = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
+    plot.title = element_text(size = 18),
+    plot.title.position = "plot",
     plot.subtitle = element_text(size = 16),
-    plot.caption  = element_text(size = 14)
+    plot.caption = element_text(size = 12)
   )
 }
 ```

@@ -32,6 +32,7 @@ theme_common <- function() {
 
     plot.margin = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
     plot.title = element_text(size = 18),
+    plot.title.position = "plot",
     plot.subtitle = element_text(size = 16),
     plot.caption = element_text(size = 12)
   )
