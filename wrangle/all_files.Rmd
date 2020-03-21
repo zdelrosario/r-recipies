@@ -1,0 +1,25 @@
+---
+title: "Find All Files"
+author: "Zach"
+date: 2020-03-21
+output:
+  github_document
+---
+
+A simple recipe to find all the files in a given directory. I often do this when
+batch processing data.
+
+```{r setup}
+library(tidyverse)
+```
+
+```{r }
+# Data directory
+dir_data <- "."
+# Find all the data files
+df_files_all <-
+  tibble(files = list.files(dir_data, full.names = TRUE)) %>%
+  mutate(name = str_sub(str_extract(files, "[^/]+\\."), 1, -2))
+
+df_files_all %>% head
+```
