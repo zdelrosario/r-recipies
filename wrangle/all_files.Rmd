@@ -18,7 +18,7 @@ library(tidyverse)
 dir_data <- "."
 # Find all the data files
 df_files_all <-
-  tibble(files = list.files(dir_data, full.names = TRUE)) %>%
+  tibble(file = list.files(dir_data, full.names = TRUE)) %>%
   mutate(name = str_sub(str_extract(files, "[^/]+\\."), 1, -2))
 
 df_files_all %>% head
