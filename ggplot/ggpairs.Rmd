@@ -42,3 +42,30 @@ mpg %>%
   ggpairs(., mapping = aes(color = class)) %>%
   print(progress = F)
 ```
+
+Changing the other figure aesthetics is a bit more involved. Keywords `lower`
+and `upper` are used to target the above- and below-diagonal plot components.
+For instance, we can add smoothing to the lower section:
+
+
+```{r vis-lower-smooth, fig.width=12, fig.height=10}
+mpg %>%
+  select(displ, year, cyl, drv, cty, hwy, class) %>%
+  ggpairs(
+    .,
+    lower = list(continuous = wrap("smooth"))
+  ) %>%
+  print(progress = F)
+```
+
+We can also change the point sizes through the lower keyword:
+
+```{r vis-lower-point-size, fig.width=12, fig.height=10}
+mpg %>%
+  select(displ, year, cyl, drv, cty, hwy, class) %>%
+  ggpairs(
+    .,
+    lower = list(continuous = wrap("points", size = 2))
+  ) %>%
+  print(progress = F)
+```
