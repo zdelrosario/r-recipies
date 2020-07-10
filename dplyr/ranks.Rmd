@@ -1,0 +1,59 @@
+---
+title: "Visualize Rank Functions"
+author: "Zachary del Rosario"
+date: 2020-07-10
+output:
+  github_document
+---
+
+I find it difficult to remember how the various window rank functions work. The
+following example graph is a useful reference to see a visual difference between
+`row_number`, `min_rank`, and `dense_rank`.
+
+```{r setup}
+library(tidyverse)
+```
+
+Here's the visual:
+
+```{r example-ranks}
+tribble(
+  ~x, ~y,
+  0,  0,
+  1,  0,
+  1,  1,
+  0,  2,
+  2,  2,
+  0,  3,
+  2,  3,
+  3,  3
+) %>%
+  mutate(
+    rk_row = row_number(y),
+    rk_min = min_rank(y),
+    rk_dense = dense_rank(y)
+  ) %>%
+  pivot_longer(
+    names_to = "fcn",
+    names_prefix = "rk_",
+    values_to = "rk",
+    cols = c(-x, -y)
+  ) %>%
+
+  ggplot(aes(x, y)) +
+  geom_point(size = 4) +
+  geom_point(
+    data = . %>% filter(rk <= 3),
+    size = 3,
+    color = "orange"
+  ) +
+  geom_label(aes(label = rk), nudge_x = 0.1, nudge_y = 0.2) +
+
+  facet_wrap(~fcn) +
+  theme_minimal() +
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1)) +
+  labs(
+    x = "",
+    y = "Minimum Three Ranks"
+  )
+```
