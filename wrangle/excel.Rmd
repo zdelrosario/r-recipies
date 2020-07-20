@@ -11,6 +11,7 @@ some tricks I've learned to handle issues found in the wild.
 
 ```{r setup}
 library(tidyverse)
+library(rzdr)
 library(readxl)
 library(httr)
 
@@ -114,7 +115,7 @@ df_filled <-
 ## Helper function to count num rows w/ NA in vars_lagged
 countna <- function(df) {
   df %>%
-    filter_at(vars(!!!vars_lagged), any_vars(is.na(.))) %>%
+    filter(rowAny(across(all_of(vars_lagged), is.na))) %>%
     dim %>%
     .[[1]]
 }
@@ -123,7 +124,10 @@ countna <- function(df) {
 while (countna(df_filled) > 0) {
   df_filled <-
     df_filled %>%
-    mutate_at(vars(!!!vars_lagged), ~if_else(is.na(.), lag(.), .))
+    mutate(across(
+      all_of(vars_lagged),
+      ~if_else(is.na(.) & !is.na(lag(.)), lag(.), .)
+    ))
 }
 ```
 
@@ -134,30 +138,21 @@ The final steps are fairly standard wrangling; ensure all the years are integer
 values and pivot to tidy the data.
 
 ```{r undoc-cast}
-## Cast all the estimates
+## Cast and pivot
 df_tmp <-
   df_filled %>%
-  mutate_at(
-    vars(`2000`:`2012`),
-    as.numeric
-  )
-
-## Reshape
-df_tmp <-
-  df_tmp %>%
+  mutate(across(`2000`:`2012`, as.numeric)) %>%
   pivot_longer(
-    `2000`:`2012`,
+    cols = `2000`:`2012`,
     names_to = "year",
-    values_to = "value",
-    names_ptypes = list(year = integer())
+    values_to = "value"
   ) %>%
   pivot_wider(
     names_from = indicator,
     values_from = "value"
-  ) %>%
-  glimpse
+  )
 
-## Final cleaning
+## Clean names
 df_undoc <-
   df_tmp %>%
   rename_all(str_to_lower)
