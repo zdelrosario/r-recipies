@@ -1,0 +1,55 @@
+---
+title: "Test: Support Points"
+author: "Zach"
+date: 2020-10-08
+output:
+  github_document
+---
+
+[Support points](https://arxiv.org/abs/1609.01811) allow one to sample a low-discrepancy means to "compact" a given distribution---either analytic or empirical.
+
+- The `support` [package](https://cran.r-project.org/web/packages/support/index.html) was removed from CRAN; archived versions can be installed via source. I use version 0.1.4 in this notebook.
+
+The purpose of this notebook is to test support points as a means for design-of-experiments (DOE) given a target distribution.
+
+```{r setup}
+library(tidyverse)
+library(support) # Not on CRAN; manual install required
+library(mvtnorm)
+```
+
+Support points can be generated to "compact" a given dataset; let's test that functionality.
+
+```{r test}
+## Generate target points
+X_norm <- rmvnorm(
+  n = 1000,
+  sigma = matrix(c(1, 0.5, 0.5, 1), nrow = 2)
+)
+
+## Generate support points
+res <- sp(
+  n = 50, # Samples
+  p = 2,  # Target dimensionality
+  dist.samp = X_norm
+)
+
+## Extract the support points
+X_sp <- res$sp
+```
+
+Visualize the points
+
+```{r vis}
+df <-
+  as_tibble(X_norm) %>%
+  mutate(source = "original") %>%
+  bind_rows(
+    as_tibble(X_sp) %>%
+    mutate(source = "sp")
+  )
+
+df %>%
+  ggplot(aes(V1, V2, color = source)) +
+  geom_point()
+```
