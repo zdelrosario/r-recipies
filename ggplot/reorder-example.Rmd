@@ -1,0 +1,57 @@
+---
+title: "Reorder on a subcategory of factors"
+author: "ZDR"
+date: 2020-12-13
+output:
+  github_document
+---
+
+Set up some example data:
+
+```{r setup}
+library(tidyverse)
+
+df_test <-
+  tribble(
+    ~group, ~value, ~cat,
+    "A", 1, "alpha",
+    "A", 2, "beta",
+    "A", 3, "gamma",
+    "B", 3, "alpha",
+    "B", 2, "beta",
+    "B", 1, "gamma",
+    "C", 2, "alpha",
+    "C", 3, "beta",
+    "C", 2, "gamma",
+  )
+```
+
+Reorder factor according to `value`; this takes the median within each group of `group`.
+
+```{r vis-natural}
+df_test %>%
+  mutate(group = fct_reorder(group, value)) %>%
+
+  ggplot(aes(group, value, fill = cat)) +
+  geom_col(position = position_dodge()) +
+
+  coord_flip()
+```
+
+Suppose we want to reorder only on the cases where `cat == "gamma"`; modify the data in-pipeline to ignore all non-gamma contributions.
+
+```{r vis-gamma}
+df_test %>%
+  mutate(
+    group = fct_reorder(
+      group,
+      if_else(cat == "gamma", value, -1),
+      .fun = max
+    )
+  ) %>%
+
+  ggplot(aes(group, value, fill = cat)) +
+  geom_col(position = position_dodge()) +
+
+  coord_flip()
+```
