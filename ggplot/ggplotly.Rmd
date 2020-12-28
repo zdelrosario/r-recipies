@@ -1,0 +1,36 @@
+---
+title: "Plotly Conversion"
+author: "Zach"
+date: 2020-12-28
+output: github_document
+always_allow_html: true
+---
+
+[Plotly](https://plotly.com/) is a really slick interactive graphics frontend, but it uses a different interface than ggplot. Thankfully there's a *trivially easy way* to convert a ggplot into a plotly figure!
+
+```{r setup}
+library(tidyverse)
+library(plotly)
+```
+
+Converting a ggplot object to a plotly object is easy with `ggplotly()`. Note that we can add to the hover text in plotly by setting the `text` aesthetic.
+
+```{r small-dataset}
+p1 <- 
+  mtcars %>% 
+  as_tibble(rownames = "model") %>% 
+  ggplot(aes(wt, mpg, text = model)) +
+  geom_point()
+ggplotly(p1)
+```
+
+Large datasets can be slow with vanilla `ggplotly()`. An additional call of `toWebGL()` gives a more scalabale graphic.
+
+```{r large-dataset}
+p2 <- 
+  diamonds %>% 
+  ggplot(aes(carat, price, color = cut)) +
+  geom_point()
+toWebGL(ggplotly(p2))
+```
+
