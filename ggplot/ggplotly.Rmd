@@ -2,8 +2,7 @@
 title: "Plotly Conversion"
 author: "Zach"
 date: 2020-12-28
-output: github_document
-always_allow_html: true
+output: html_document
 ---
 
 [Plotly](https://plotly.com/) is a really slick interactive graphics frontend, but it uses a different interface than ggplot. Thankfully there's a *trivially easy way* to convert a ggplot into a plotly figure!
@@ -24,6 +23,8 @@ p1 <-
 ggplotly(p1)
 ```
 
+In order to use interactivity in a knitted document, you need to knit to `html` format.
+
 Large datasets can be slow with vanilla `ggplotly()`. An additional call of `toWebGL()` gives a more scalabale graphic.
 
 ```{r large-dataset}
@@ -34,3 +35,4 @@ p2 <-
 toWebGL(ggplotly(p2))
 ```
 
+With plotly you can click legend entries to toggle layers of the graphic; e.g. you can click `Ideal` to remove the `Ideal` cut diamonds to help see occluded points.
