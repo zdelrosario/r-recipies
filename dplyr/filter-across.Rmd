@@ -1,0 +1,45 @@
+---
+title: "Filtering 'across'"
+author: "Zachary del Rosario"
+date: 2021-06-13
+output:
+  github_document
+---
+
+`filter()` uses special syntax for `across`; namely, there are replacement helpers.
+
+```{r setup}
+library(tidyverse)
+```
+
+
+# Filter `across()` replacements
+
+Remembering this syntax is tricky; see the [vignette](https://dplyr.tidyverse.org/articles/colwise.html#filter) for details. But in short there are two replacements for `across()` when using filter:
+
+```{r filter-data}
+df_tofilter <- 
+  tribble(
+    ~idx, ~A, ~B, ~C,
+     "N",  0,  0,  0,
+     "X",  1,  0,  0,
+     "Y",  0,  1,  0,
+     "Z",  0,  0,  1,
+     "A",  1,  1,  1
+  )
+df_tofilter
+```
+
+## `if_any()` 
+
+```{r filter-if_any}
+df_tofilter %>% 
+  filter(if_any(c(A, B, C), ~ . > 0))
+```
+
+## `if_all()`
+
+```{r filter-if_all}
+df_tofilter %>% 
+  filter(if_all(c(A, B, C), ~ . > 0))
+```
