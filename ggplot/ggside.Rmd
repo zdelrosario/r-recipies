@@ -1,0 +1,94 @@
+---
+title: "`ggside` sidebar tools"
+author: "Zach"
+date: 2019-12-10
+output:
+  github_document
+---
+
+**Purpose**: A reminder on how to use GGside to add sidebar plots
+
+GGside is a useful package for adding summary data to the sides of a plot. Here are some examples, adapted from the [vignette](https://cran.r-project.org/web/packages/ggside/vignettes/ggside_basic_usage.html?utm_source=pocket_mylist).
+
+Available geoms (xside and yside each):
+- Bar
+- Boxplot
+- Density
+- Freqpoly
+- Histogram
+- Line
+- Path
+- Point
+- Text
+- Tile
+- Violin
+
+# Setup
+
+```{r setup}
+library(tidyverse)
+library(ggside)
+library(palmerpenguins)
+```
+
+Process a dataset to visualize.
+
+```{r}
+df_diamonds_summary <- 
+  diamonds %>%
+  mutate(`Cut Clarity` = paste(cut, clarity)) %>%
+  group_by(`Cut Clarity`,cut, clarity, color) %>%
+  summarise(
+    n = n(),
+    price_mean = mean(price),
+    price_sd = sd(price)
+  )
+df_diamonds_summary
+```
+
+# Recipies
+
+## Tile plots
+
+Visualize with tile sides:
+
+```{r vis-tiles}
+df_diamonds_summary %>% 
+  ggplot(aes(color, `Cut Clarity`)) +
+  geom_tile(aes(color, fill = price_mean)) +
+  geom_xsidetile(
+    data = . %>% 
+      group_by(color) %>% 
+      summarize(val = median(price_mean)),
+    mapping = aes(xfill = val, y = "median of means")
+  ) +
+  geom_ysidetile(
+    data = . %>% 
+      group_by(`Cut Clarity`) %>% 
+      summarize(val = median(price_mean)),
+    aes(x = "median of means", yfill = val)
+  ) +
+  theme()
+```
+
+*Notes*:
+
+- `ggside` doesn't manually carry out grouping for summaries under-the-hood; you'll likely have to post-process the `data` within your plot.
+- `ggside` functions need manual overrides for the unused axis
+  - for instance, if I didn't set `x` in the `ysidetile` call above, I'd get a repeated `color` axis
+  
+## Density plots
+
+```{r vis-densities}
+penguins %>% 
+  
+  ggplot(aes(bill_length_mm, bill_depth_mm, color = species)) +
+  geom_point() +
+  geom_xsidedensity() +
+  geom_ysidedensity() +
+  theme(legend.position = "bottom")
+```
+
+*Notes*
+
+- The relevant vignette manually sets the density aesthetic, but `ggside` handles this automatically; you can leave out the `aes` call
