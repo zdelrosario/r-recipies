@@ -1,0 +1,23 @@
+---
+title: "Visualizing NaNs with naniar"
+author: "Zach"
+date: 2022-09-26
+output:
+  github_document
+---
+
+**Purpose**: This is a brief reminder on the naniar package for visualizing NaN values. The [vignette](https://cran.r-project.org/web/packages/naniar/vignettes/getting-started-w-naniar.html) is a much more complete reference.
+
+```{r setup}
+library(tidyverse)
+library(naniar)
+```
+
+`naniar::geom_miss_point` will visualize all rows in a dataset, even if one or both of the columns contains `NaN` values. `NaN`s will be visualized in the "margin" with a different color.
+
+```{r}
+airquality %>% 
+  ggplot(aes(Solar.R, Ozone)) +
+  geom_miss_point()
+```
+
